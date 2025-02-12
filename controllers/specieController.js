@@ -18,4 +18,20 @@ const create = async (req, res) => {
     }
 }
 
-module.exports = { create };
+const deleteSpecie = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const specie = await Specie.findByPk(id);
+        if (!specie) {
+            return res.status(404).json({ message: 'Specie not found' });
+        }
+
+        await specie.destroy();
+        res.status(200).json({ message: 'Specie deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+module.exports = { create, deleteSpecie };

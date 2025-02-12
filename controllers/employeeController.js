@@ -33,10 +33,11 @@ const login = async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, employee.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Incorect Password' });
+            return res.status(400).json({ message: 'Incorrect Password' });
         }
 
-        const token = jwt.sign({ id: employee.id }, process.env.PRIVATE_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: employee.id, isAdmin: employee.isAdmin }, process.env.PRIVATE_KEY, { expiresIn: '1h' });
+
         res.status(200).json({ message: 'Client connected successfully', token });
     } catch (error) {
         console.error('Error logging in employee: ', error);

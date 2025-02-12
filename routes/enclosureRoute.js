@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const router = express.Router();
 
-router.post('/new', createEnclosure);
+router.post('/new', auth, createEnclosure);
 router.delete('/delete/:id', auth, admin, deleteEnclosure);
 router.put('/update/:id', auth, admin, updateEnclosure);
 

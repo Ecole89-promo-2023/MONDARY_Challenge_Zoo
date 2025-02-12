@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const router = express.Router();
 
-router.post('/new', createSpecie);
+router.post('/new', auth, createSpecie);
 router.delete('/delete/:id', auth, admin, deleteSpecie);
 router.put('/update/:id', auth, admin, updateSpecie);
 

@@ -1,6 +1,8 @@
 const Animal = require('../models/Animal');
 const Specie = require('../models/Specie');
 const Enclosure = require('../models/Enclosure');
+const Employee = require('../models/Employee');
+const EmployeeAnimal = require('../models/EmployeeAnimal');
 require('dotenv').config();
 
 const createAnimal = async (req, res) => {
@@ -68,4 +70,33 @@ const updateAnimal = async (req, res) => {
     }
 };
 
-module.exports = { createAnimal, deleteAnimal, updateAnimal };
+const linkAnimalToEmployee = async (req, res) => {
+    try {
+        const { animalId, employeeId } = req.params;
+
+        const animal = await Animal.findByPk(animalId);
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal not found' });
+        }
+
+        const employee = await Employee.findByPk(employeeId);
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        const existingLink = await EmployeeAnimal.findOne({
+            where: { employeeId: employeeId, animalId: animalId }
+        });
+        if (existingLink) {
+            return res.status(400).json({ message: `Employee ${employeeId} is already linked to this animal` });
+        }
+
+        await EmployeeAnimal.create({ employeeId: employeeId, animalId: animalId });
+        res.status(201).json({ message: `Employee ${employeeId} successfully linked to animal ${animalId}` });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+
+    }
+};
+
+module.exports = { createAnimal, deleteAnimal, updateAnimal, linkAnimalToEmployee };

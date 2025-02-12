@@ -44,7 +44,6 @@ const updateSpecie = async (req, res) => {
             return res.status(404).json({ message: 'Specie not found' });
         }
 
-        // Check if new name already exists for another specie
         if (name && name !== specie.name) {
             const existingSpecie = await Specie.findOne({ where: { name } });
             if (existingSpecie) {

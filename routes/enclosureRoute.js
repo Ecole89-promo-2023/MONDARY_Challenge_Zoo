@@ -1,7 +1,11 @@
 const express = require('express');
-const { create } = require('../controllers/enclosureController');
+const { createEnclosure, deleteEnclosure, updateEnclosure } = require('../controllers/enclosureController');
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const router = express.Router();
 
-router.post('/new', create);
+router.post('/new', createEnclosure);
+router.delete('/delete/:id', auth, admin, deleteEnclosure);
+router.put('/update/:id', auth, admin, updateEnclosure);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Enclosure = require('../models/Enclosure');
+const Animal = require('../models/Animal');
 require('dotenv').config();
 
 const createEnclosure = async (req, res) => {
@@ -58,4 +59,44 @@ const updateEnclosure = async (req, res) => {
     }
 };
 
-module.exports = { createEnclosure, deleteEnclosure, updateEnclosure };
+const getOne = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const enclosure = await Enclosure.findByPk(id);
+        if (!enclosure) {
+            return res.status(404).json({ message: 'Enclosure not found' });
+        }
+
+        res.status(200).json(enclosure);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAll = async (_, res) => {
+    try {
+        const enclosures = await Enclosure.findAll();
+        res.status(200).json(enclosures);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAllAnimals = async (req, res) => {
+    try {
+        const { enclosureId } = req.params;
+
+        const enclosure = await Enclosure.findByPk(enclosureId);
+        if (!enclosure) {
+            return res.status(404).json({ message: 'Enclosure not found' });
+        }
+
+        const animals = await Animal.findAll({ where: { enclosureId } });
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+module.exports = { createEnclosure, deleteEnclosure, updateEnclosure, getOne, getAll, getAllAnimals };

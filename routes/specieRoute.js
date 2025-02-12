@@ -1,10 +1,11 @@
 const express = require('express');
-const { create, deleteSpecie } = require('../controllers/specieController');
+const { createSpecie, deleteSpecie, updateSpecie } = require('../controllers/specieController');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const router = express.Router();
 
-router.post('/new', create);
+router.post('/new', createSpecie);
 router.delete('/delete/:id', auth, admin, deleteSpecie);
+router.put('/update/:id', auth, admin, updateSpecie);
 
 module.exports = router;

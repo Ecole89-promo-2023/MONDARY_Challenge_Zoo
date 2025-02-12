@@ -92,7 +92,7 @@ const linkAnimalToEmployee = async (req, res) => {
         }
 
         await EmployeeAnimal.create({ employeeId: employeeId, animalId: animalId });
-        res.status(201).json({ message: `Employee ${employeeId} successfully linked to animal ${animalId}` });
+        res.status(201).json({ message: `Animal ${animalId} successfully linked to employee ${employeeId}` });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
 
@@ -114,7 +114,7 @@ const getOne = async (req, res) => {
     }
 }
 
-const getAll = async (req, res) => {
+const getAll = async (_, res) => {
     try {
         const animals = await Animal.findAll();
         res.status(200).json(animals);

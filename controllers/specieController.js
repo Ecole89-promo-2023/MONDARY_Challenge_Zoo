@@ -58,4 +58,44 @@ const updateSpecie = async (req, res) => {
     }
 };
 
-module.exports = { createSpecie, deleteSpecie, updateSpecie };
+const getOne = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const specie = await Specie.findByPk(id);
+        if (!specie) {
+            return res.status(404).json({ message: 'Specie not found' });
+        }
+
+        res.status(200).json(specie);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAll = async (_, res) => {
+    try {
+        const species = await Specie.findAll();
+        res.status(200).json(species);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAllAnimals = async (req, res) => {
+    try {
+        const { specieId } = req.params;
+
+        const specie = await Specie.findByPk(specieId);
+        if (!specie) {
+            return res.status(404).json({ message: 'Specie not found' });
+        }
+
+        const animals = await Animal.findAll({ where: { specieId } });
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+module.exports = { createSpecie, deleteSpecie, updateSpecie, getOne, getAll, getAllAnimals };

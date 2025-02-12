@@ -79,6 +79,35 @@ const updateEmployee = async (req, res) => {
     }
 };
 
+const linkEmployeeToAnimal = async (req, res) => {
+    try {
+        const { employeeId, animalId } = req.params;
+
+        const employee = await Employee.findByPk(employeeId);
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        const animal = await Animal.findByPk(animalId);
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal not found' });
+        }
+
+        const existingLink = await EmployeeAnimal.findOne({
+            where: { employeeId: employeeId, animalId: animalId }
+        });
+        if (existingLink) {
+            return res.status(400).json({ message: `Animal ${animalId} is already linked to this employee` });
+        }
+
+        await EmployeeAnimal.create({ employeeId: employeeId, animalId: animalId });
+        res.status(201).json({ message: `Employee ${employeeId} successfully linked to animal ${animalId}` });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+
+    }
+};
+
 const getOne = async (req, res) => {
     try {
         const { id } = req.params;
@@ -94,7 +123,7 @@ const getOne = async (req, res) => {
     }
 }
 
-const getAll = async (req, res) => {
+const getAll = async (_, res) => {
     try {
         const employees = await Employee.findAll({ attributes: { exclude: ['password'] } });
         res.status(200).json(employees);
@@ -119,4 +148,4 @@ const getAllAnimals = async (req, res) => {
     }
 }
 
-module.exports = { registerEmployee, loginEmployee, deleteEmployee, updateEmployee, getOne, getAll, getAllAnimals };
+module.exports = { registerEmployee, loginEmployee, deleteEmployee, updateEmployee, linkEmployeeToAnimal, getOne, getAll, getAllAnimals };

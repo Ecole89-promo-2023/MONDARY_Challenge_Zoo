@@ -99,4 +99,66 @@ const linkAnimalToEmployee = async (req, res) => {
     }
 };
 
-module.exports = { createAnimal, deleteAnimal, updateAnimal, linkAnimalToEmployee };
+const getOne = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const animal = await Animal.findByPk(id);
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal not found' });
+        }
+
+        res.status(200).json(animal);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAll = async (req, res) => {
+    try {
+        const animals = await Animal.findAll();
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAllByEnclosure = async (req, res) => {
+    try {
+        const { enclosureId } = req.params;
+
+        const animals = await Animal.findAll({ where: { enclosureId } });
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+const getAllbySpecie = async (req, res) => {
+    try {
+        const { specieId } = req.params;
+
+        const animals = await Animal.findAll({ where: { specieId } });
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+const getAllByEmployee = async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+
+        const employee = await Employee.findByPk(employeeId);
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        const animals = await EmployeeAnimal.findAll({ where: { employeeId } });
+        res.status(200).json(animals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+module.exports = { createAnimal, deleteAnimal, updateAnimal, linkAnimalToEmployee, getOne, getAll, getAllByEnclosure, getAllbySpecie, getAllByEmployee };

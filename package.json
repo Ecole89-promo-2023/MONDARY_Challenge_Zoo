@@ -1,0 +1,30 @@
+{
+  "name": "mondary_challenge_zoo",
+  "version": "1.0.0",
+  "description": "Le sujet est la gestion d'un zoo :\r - chaque animal appartient à une espèce\r - chaque animal vit dans un enclos\r - chaque animal peut être soigné par un ou plusieurs employés\r - chaque employé peut soigner un ou plusieurs animaux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ecole89-promo-2023/MONDARY_Challenge_Zoo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ecole89-promo-2023/MONDARY_Challenge_Zoo/issues"
+  },
+  "homepage": "https://github.com/Ecole89-promo-2023/MONDARY_Challenge_Zoo#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0",
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.5"
+  }
+}

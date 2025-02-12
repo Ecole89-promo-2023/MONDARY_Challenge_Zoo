@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Employee = require('../models/Employee');
+const EmployeeAnimal = require('../models/EmployeeAnimal');
 require('dotenv').config();
 
 const registerEmployee = async (req, res) => {
@@ -78,4 +79,44 @@ const updateEmployee = async (req, res) => {
     }
 };
 
-module.exports = { registerEmployee, loginEmployee, deleteEmployee, updateEmployee };
+const getOne = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const employee = await Employee.findByPk(id, { attributes: { exclude: ['password'] } });
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        res.status(200).json(employee);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAll = async (req, res) => {
+    try {
+        const employees = await Employee.findAll({ attributes: { exclude: ['password'] } });
+        res.status(200).json(employees);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+const getAllAnimals = async (req, res) => {
+    try {
+        const { employeeId } = req.params;
+
+        const employee = await Employee.findByPk(employeeId);
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+
+        const employeeAnimals = await EmployeeAnimal.findAll({ where: { employeeId } });
+        res.status(200).json(employeeAnimals);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
+module.exports = { registerEmployee, loginEmployee, deleteEmployee, updateEmployee, getOne, getAll, getAllAnimals };

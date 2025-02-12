@@ -1,6 +1,7 @@
 const express = require('express');
 const employeeRoute = require('./routes/employeeRoute');
 const specieRoute = require('./routes/specieRoute');
+const enclosureRoute = require('./routes/enclosureRoute');
 const sequelize = require('./config/db');
 require('dotenv').config();
 
@@ -20,7 +21,7 @@ async function initDb() {
 initDb();
 app.use('/employee', employeeRoute);
 app.use('/specie', specieRoute);
-
+app.use('/enclosure', enclosureRoute);
 
 PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
